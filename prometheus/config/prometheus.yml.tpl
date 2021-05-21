@@ -22,7 +22,7 @@ scrape_configs:
 
     metrics_path: /metrics
 
-  - job_name: 'node_exporter'
+  - job_name: 'node'
 
     consul_sd_configs:
     - server: '{{ env "NOMAD_IP_prometheus_ui" }}:8500'
