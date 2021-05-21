@@ -73,6 +73,7 @@ job "monitoring" {
 
         volumes = [
           "local/prometheus.yml:/etc/prometheus/prometheus.yml",
+          "local/rules/:/etc/prometheus/rules/",
         ]
 
         ports = ["prometheus_ui"]
@@ -96,6 +97,11 @@ job "monitoring" {
         data = file("./config/prometheus.yml.tpl")
       }
 
+      artifact {
+        source      = "https://raw.githubusercontent.com/theztd/monitoring/main/prometheus/config/rules/node_alerts.yml"
+        destination = "local/rules/node_alerts.yml"
+      }
+
     } # END prometheus
 
     task "alertmanager" {
@@ -106,7 +112,6 @@ job "monitoring" {
 
         volumes = [
           "local/alertmanager.yml:/etc/prometheus/alertmanager.yml",
-          "local/rules/:/etc/prometheus/rules/",
         ]
 
         ports = ["alertmanager_ui"]
@@ -124,11 +129,6 @@ job "monitoring" {
         change_mode = "restart"
         destination = "local/alertmanager.yml"
         data = file("./config/alertmanager.yml.tpl")
-      }
-
-      artifact {
-        source      = "https://raw.githubusercontent.com/theztd/monitoring/main/prometheus/config/rules/node_alerts.yml"
-        destination = "local/rules/node_alerts.yml"
       }
 
     } # END alertmanager
