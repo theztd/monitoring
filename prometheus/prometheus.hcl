@@ -63,6 +63,8 @@ job "monitoring" {
 
     ephemeral_disk {
       size = 300
+      sticky = true
+      migrate = true
     }
 
     task "prometheus" {
