@@ -23,7 +23,7 @@ jobs:
         run: |
             cd prometheus
             nomad job run \
-              -var='dcs=["dev"]' \
+              -var='dcs=["dc1", "vultr"]' \
               -var='fqdn=prometheus.fejk.net' \
               prometheus.hcl
             
