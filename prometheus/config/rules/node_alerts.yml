@@ -20,6 +20,15 @@ groups:
     labels:
       severity: warning
 
+  - alert: NodeRAMisFull
+    expr: '((node_memory_MemTotal_bytes - node_memory_MemFree_bytes) / (node_memory_MemTotal_bytes)) * 100 > 95'
+    for: 10m
+    labels:
+      severity: warning
+    annotations:
+      message: Node {{ $labels.instance }} has almost full memmory
+      summary: RAM is almost full
+
   - alert: NodeFilesystemSpaceFillingUp
     annotations:
       description: Filesystem on {{ $labels.device }} at {{ $labels.instance }} has
