@@ -16,7 +16,7 @@ groups:
       description: '{{ $labels.instance }} requires a reboot.'
       summary: Instance {{ $labels.instance }} - reboot required
     expr: node_reboot_required > 0
-    for: 30m
+    for: 3h
     labels:
       severity: warning
 
@@ -51,9 +51,21 @@ groups:
       node\",fstype!=\"\"} * 100 < 20\nand\n  predict_linear(node_filesystem_avail_bytes{job=\"\
       node\",fstype!=\"\"}[6h], 4*60*60) < 0\nand\n  node_filesystem_readonly{job=\"\
       node\",fstype!=\"\"} == 0\n)\n"
-    for: 1h
+    for: 20m
     labels:
       severity: critical
+
+  - alert: NodeFilesystemAlmostOutOfSpace
+    annotations:
+      description: Filesystem on {{ $labels.device }} at {{ $labels.instance }} has
+        only {{ printf "%.2f" $value }}% available space left.
+      summary: Filesystem has less than 20% space left.
+    expr: "(\n  node_filesystem_avail_bytes{job=\"node\",fstype!=\"\"} / node_filesystem_size_bytes{job=\"\
+      node\",fstype!=\"\"} * 100 < 20\nand\n  node_filesystem_readonly{job=\"node\",fstype!=\"\
+      \"} == 0\n)\n"
+    for: 15m
+    labels:
+      severity: warning
 
   - alert: NodeFilesystemAlmostOutOfSpace
     annotations:
@@ -63,19 +75,7 @@ groups:
     expr: "(\n  node_filesystem_avail_bytes{job=\"node\",fstype!=\"\"} / node_filesystem_size_bytes{job=\"\
       node\",fstype!=\"\"} * 100 < 5\nand\n  node_filesystem_readonly{job=\"node\",fstype!=\"\
       \"} == 0\n)\n"
-    for: 1h
-    labels:
-      severity: warning
-
-  - alert: NodeFilesystemAlmostOutOfSpace
-    annotations:
-      description: Filesystem on {{ $labels.device }} at {{ $labels.instance }} has
-        only {{ printf "%.2f" $value }}% available space left.
-      summary: Filesystem has less than 3% space left.
-    expr: "(\n  node_filesystem_avail_bytes{job=\"node\",fstype!=\"\"} / node_filesystem_size_bytes{job=\"\
-      node\",fstype!=\"\"} * 100 < 3\nand\n  node_filesystem_readonly{job=\"node\",fstype!=\"\
-      \"} == 0\n)\n"
-    for: 1h
+    for: 15m
     labels:
       severity: critical
 
@@ -109,9 +109,9 @@ groups:
     annotations:
       description: Filesystem on {{ $labels.device }} at {{ $labels.instance }} has
         only {{ printf "%.2f" $value }}% available inodes left.
-      summary: Filesystem has less than 5% inodes left.
+      summary: Filesystem has less than 25% inodes left.
     expr: "(\n  node_filesystem_files_free{job=\"node\",fstype!=\"\"} / node_filesystem_files{job=\"\
-      node\",fstype!=\"\"} * 100 < 5\nand\n  node_filesystem_readonly{job=\"node\",fstype!=\"\
+      node\",fstype!=\"\"} * 100 < 25\nand\n  node_filesystem_readonly{job=\"node\",fstype!=\"\
       \"} == 0\n)\n"
     for: 1h
     labels:
@@ -121,9 +121,9 @@ groups:
     annotations:
       description: Filesystem on {{ $labels.device }} at {{ $labels.instance }} has
         only {{ printf "%.2f" $value }}% available inodes left.
-      summary: Filesystem has less than 3% inodes left.
+      summary: Filesystem has less than 10% inodes left.
     expr: "(\n  node_filesystem_files_free{job=\"node\",fstype!=\"\"} / node_filesystem_files{job=\"\
-      node\",fstype!=\"\"} * 100 < 3\nand\n  node_filesystem_readonly{job=\"node\",fstype!=\"\
+      node\",fstype!=\"\"} * 100 < 10\nand\n  node_filesystem_readonly{job=\"node\",fstype!=\"\
       \"} == 0\n)\n"
     for: 1h
     labels:
