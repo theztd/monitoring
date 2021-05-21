@@ -126,12 +126,10 @@ job "monitoring" {
         data = file("./config/alertmanager.yml.tpl")
       }
 
-      // template {
-      //   change_mode = "restart"
-      //   destination = "local/rules/node_alerts.yml"
-      //   data = file("./config/rules/node_alerts.yml")
-      // }
-
+      artifact {
+        source      = "https://github.com/theztd/monitoring/blob/main/prometheus/config/rules/node_alerts.yml"
+        destination = "local/rules/node_alerts.yml"
+      }
 
     } # END alertmanager
 
