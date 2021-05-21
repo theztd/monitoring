@@ -81,9 +81,9 @@ job "monitoring" {
       }
       
       resources {
-        cpu = 500
-        memory = 48
-        memory_max = 128
+        cpu = 600
+        memory = 128
+        memory_max = 256
       }
 
       // artifact {
