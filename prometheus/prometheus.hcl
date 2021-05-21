@@ -73,7 +73,7 @@ job "monitoring" {
 
         volumes = [
           "local/prometheus.yml:/etc/prometheus/prometheus.yml",
-          "local/rules/:/etc/prometheus/rules/",
+          "local/rules:/etc/prometheus/rules",
         ]
 
         ports = ["prometheus_ui"]
@@ -99,7 +99,7 @@ job "monitoring" {
 
       artifact {
         source      = "https://raw.githubusercontent.com/theztd/monitoring/main/prometheus/config/rules/node_alerts.yml"
-        destination = "local/rules/node_alerts.yml"
+        destination = "local/rules/"
       }
 
     } # END prometheus

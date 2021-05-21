@@ -11,7 +11,7 @@ alerting:
       - localhost:9093
 
 rule_files:
-- /etc/prometheus/rules/*.rules
+- /etc/prometheus/rules/*.yml
 
 scrape_configs:
   - job_name: 'cadvisor'
