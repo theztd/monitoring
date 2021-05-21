@@ -81,7 +81,7 @@ job "monitoring" {
       }
       
       resources {
-        cpu = 100
+        cpu = 500
         memory = 48
         memory_max = 128
       }
@@ -119,7 +119,7 @@ job "monitoring" {
       }
       
       resources {
-        cpu = 20
+        cpu = 100
         memory = 16
         memory_max = 64
       }
