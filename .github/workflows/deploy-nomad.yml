@@ -9,7 +9,7 @@ on:
 jobs:
   deploy-prometheus:
     runs-on: ubuntu-latest
-    needs: Build
+    #needs: Build
     container:
       image: theztd/nomad:latest
     steps:
