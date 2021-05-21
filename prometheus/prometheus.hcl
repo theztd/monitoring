@@ -127,7 +127,7 @@ job "monitoring" {
       }
 
       artifact {
-        source      = "https://github.com/theztd/monitoring/blob/main/prometheus/config/rules/node_alerts.yml"
+        source      = "https://raw.githubusercontent.com/theztd/monitoring/main/prometheus/config/rules/node_alerts.yml"
         destination = "local/rules/node_alerts.yml"
       }
 
