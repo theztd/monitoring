@@ -1,0 +1,56 @@
+name: Release prometheus config
+
+on:
+  push:
+#    branches:
+#    - 'master'
+#    - 'main'
+    tags:
+    - 'v*'
+
+jobs:
+  release_tgz:
+    runs-on: ubuntu-latest
+    container:
+      image: debian:latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Build package
+        run: |
+          cd prometheus/config
+          tar -czpf ../prometheus-config.tgz 
+
+      - name: 'Upload Artifact'
+        uses: actions/upload-artifact@v2
+        with:
+          name: prometheus
+          path: prometheus/prometheus-config.tgz
+          retention-days: 5
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: latest
+          release_name: Release latest
+          draft: false
+          prerelease: false
+
+      - name: Upload Release Asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./prometheus/prometheus-config.tgz
+          asset_name: prometheus-config.tgz
+          asset_content_type: application/gzip
+
+

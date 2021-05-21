@@ -1,2 +1,12 @@
-# monitoring
-Basic cluster monitoring
+# Basic cluster monitoring
+
+
+## Prometheus enpoint deffinition
+
+
+
+## Prometheus alertmanager deffinition
+
+
+
+## Prometheus templates
