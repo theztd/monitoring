@@ -15,6 +15,14 @@ job "monitoring" {
   group "prometheus" {
     count = 1
 
+    // Disallow moving this group to another node
+    // Sticky deployment
+    reschedule {
+      attempts  = 0
+      unlimited = false
+    }
+
+
     network {
       port "prometheus_ui" {
         to = "9090"
