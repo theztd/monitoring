@@ -52,6 +52,7 @@ job "monitoring" {
       }
     }
 
+/*
     service {
       name = "alertmanager"
       port = "alertmanager_ui"
@@ -61,7 +62,7 @@ job "monitoring" {
         "traefik.http.routers.alertmanager-http.rule=Host(`alerts.fejk.net`)",
       ]
     }
-
+*/
     restart {
       attempts = 2
       interval = "30m"
@@ -114,6 +115,8 @@ job "monitoring" {
 
     } # END prometheus
 
+
+/*
     task "alertmanager" {
       driver = "docker"
 
@@ -142,7 +145,7 @@ job "monitoring" {
       }
 
     } # END alertmanager
-
+*/
 
 
 
