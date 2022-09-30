@@ -16,7 +16,7 @@ receivers:
   - channel: '#server-events-stage'
     send_resolved: true
     title: |-
-      [{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ range .Alerts }}{{ .Annotations.summary }}\n{{ end }}
+      [{{ .Status }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ range .Alerts }}{{ .Annotations.summary }}\n{{ end }}
     text: >-
       {{ with index .Alerts 0 -}}
         :chart_with_upwards_trend: *<{{ .GeneratorURL }}|Graph>*
