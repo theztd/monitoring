@@ -23,6 +23,7 @@ scrape_configs:
     metrics_path: /metrics
 
   - job_name: 'node'
+#   scheme: https
     basic_auth:
       username: agent
 #      password: $2a$12$c8KpSq9ZzKmccaxAvE5uH.K1.Al1C5oFyHWWJwNCZWVH3n0bYXG6O
