@@ -1,0 +1,44 @@
+#
+#  Require consul configuration
+#
+---
+server:
+  http_listen_port: 3100
+  http_server_read_timeout: 10m
+  http_server_write_timeout: 10m
+  http_server_idle_timeout: 10m
+memberlist:
+  join_members:
+    - loki:7946
+limits_config:
+  per_stream_rate_limit: 0
+query_range:
+  split_queries_by_interval: 1m
+  cache_results: true
+schema_config:
+  configs:
+    - from: 2021-08-01
+      store: boltdb-shipper
+      object_store: s3
+      schema: v11
+      index:
+        prefix: index_
+        period: 24h
+common:
+  path_prefix: /loki
+  replication_factor: 1
+  storage:
+    s3:
+      endpoint: '{{ key "monitoring/loki/endpoint" }}'
+      insecure: true
+      bucketnames: '{{ key "monitoring/loki/bucketname" }}'
+      access_key_id: '{{ key "monitoring/loki/access_key_id" }}'
+      secret_access_key: '{{ key "monitoring/loki/secret_access_key" }}'
+      s3forcepathstyle: true
+  ring:
+    kvstore:
+      store: memberlist
+ruler:
+  storage:
+    s3:
+      bucketnames: loki-ruler
