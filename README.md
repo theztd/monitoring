@@ -1,6 +1,7 @@
 # Basic cluster monitoring
 
-Try to move deployment to the nomad.
+Working prometheus gathering information from nomad cluster and sending them to grafana cloud.
+
 
 ## Before start
 

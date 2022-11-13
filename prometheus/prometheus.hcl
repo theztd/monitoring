@@ -5,12 +5,18 @@ variable "dcs" {
 
 variable "fqdn" {
     type = string
+    default = "prometheus.fejk.net"
 }
 
-job "monitoring" {
+job "prometheus" {
   datacenters = var.dcs
   type        = "service"
   namespace   = "system"
+
+  constraint {
+    attribute = attr.unique.hostname
+    value     = "n1.fejk.net"
+  }
 
   group "prometheus" {
     count = 1
@@ -24,6 +30,12 @@ job "monitoring" {
 
 
     network {
+      mode = "bridge"
+
+      dns {
+        servers = ["172.17.0.1", "8.8.8.8", "1.1.1.1"]
+      }
+
       port "prometheus_ui" {
         to = "9090"
       }
@@ -71,7 +83,7 @@ job "monitoring" {
     }
 
     ephemeral_disk {
-      size = 300
+      size = 500
       sticky = true
       migrate = true
     }
@@ -81,10 +93,17 @@ job "monitoring" {
 
       config {
         image = "prom/prometheus:latest"
+        
+        args = [
+          "--log.level=debug",
+          "--config.file=/etc/prometheus/prometheus.yml",
+          "--storage.tsdb.path=/prometheus",
+          "--web.console.libraries=/usr/share/prometheus/console_libraries",
+          "--web.console.templates=/usr/share/prometheus/consoles",
+        ]
 
         volumes = [
-          "local/prometheus.yml:/etc/prometheus/prometheus.yml",
-          "local/rules:/etc/prometheus/rules",
+          "local/config:/etc/prometheus",
         ]
 
         ports = ["prometheus_ui"]
@@ -97,21 +116,18 @@ job "monitoring" {
         memory_max = 256
       }
 
-      // artifact {
-      //   source      = "https://github.com/theztd/flaskapp-prom/archive/refs/tags/v0.1.14p1.tar.gz"
-      //   destination = "local/templates"
-      // }
-
       template {
         change_mode = "restart"
-        destination = "local/prometheus.yml"
+        destination = "local/config/prometheus.yml"
         data = file("./config/prometheus.yml.tpl")
       }
 
-      artifact {
-        source      = "https://raw.githubusercontent.com/theztd/monitoring/main/prometheus/config/rules/node_alerts.yml"
-        destination = "local/rules/"
-      }
+      // template {
+      //   change_mode = "restart"
+      //   destination = "local/config/alertmanager.yml"
+      //   data = file("./config/alertmanager.yml.tpl")
+      // }
+
 
     } # END prometheus
 

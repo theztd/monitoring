@@ -1,6 +1,10 @@
 global:
   resolve_timeout: 5m
-  slack_api_url: https://hooks.slack.com/services/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
+{{ if nomadVarExists "nomad/jobs/prometheus" }}
+{{ with nomadVar "nomad/jobs/prometheus" }}
+  slack_api_url: '{{ .slack_api_url }}'
+{{ end }}
+{{ end }}
 
 route:
   group_by: ['alertname']

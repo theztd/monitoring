@@ -2,4 +2,4 @@
 
 FROM prom/prometheus
 
-ADD conf/ /etc/prometheus/
+ADD config/ /etc/prometheus/
